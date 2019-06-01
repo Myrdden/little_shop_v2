@@ -9,8 +9,17 @@ class UsersController < ApplicationController
     user_email = user[:email]
     if user.save
       session[:user_id] = user.id
-      flash[:message] = "Welcome, #{user.name}. You are now registered and logged in!"
-      redirect_to profile_path
+      if user.addresses.create(name: "Home", address: params[:address], city: params[:city],
+                          state: params[:state], zip: params[:zip])
+        binding.pry
+        flash[:message] = "Welcome, #{user.name}."
+        redirect_to profile_path
+      else
+        flash[:warn] = "Missing address fields."
+        user_params_no_pw = user_params.except(:password, :password_confirmation)
+        @user = User.new(user_params_no_pw)
+        render :new
+      end
     elsif User.find_by_email(user_email) != nil
       user_params_no_email_no_pw = user_params.except(:email, :password, :password_confirmation)
       @user = User.new(user_params_no_email_no_pw)
@@ -26,7 +35,7 @@ class UsersController < ApplicationController
       end
       render :new
     end
-  end
+ end
 
   def show
     if current_user.nil?
@@ -56,7 +65,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :address, :city, :state, :zip, :email, :password, :password_confirmation)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
 end

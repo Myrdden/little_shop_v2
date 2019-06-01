@@ -1,7 +1,7 @@
 <div class="container">
   <h2>Edit Address:</h2>
 
-  <%= form_for @address, url: address_path(@address.id), method: "post" do |f| %>
+  <%= form_for @address, url: "/addresses/#{@address.id}", method: "post" do |f| %>
     <h4>Name:</h4>
     <%= f.text_field :name, size: "40" %>
     <h4>Address:</h4>

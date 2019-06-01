@@ -4,5 +4,5 @@ class Address < ApplicationRecord
   validates :address, presence: true
   validates :city, presence: true
   validates :state, presence: true
-  validates :zip, presence: true, length: (5..5)
+  validates :zip, presence: true
 end

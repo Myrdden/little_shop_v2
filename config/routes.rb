@@ -21,7 +21,8 @@ Rails.application.routes.draw do
     resources :orders, only: [:index, :show, :destroy]
   end
 
-  resources :addresses
+  resources :addresses, only: [:new, :edit, :create]
+  post '/addresses/:id', to: "addresses#update"
 
   put '/users', to: "users#update"
 

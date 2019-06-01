@@ -4,8 +4,7 @@ class AddressesController < ApplicationController
   end
 
   def create
-    adding = current_user.items.create(address_params)
-    if adding.save
+    if current_user.items.create(address_params)
       flash[:note] = "Address Added."
       redirect_to profile_path
     else
@@ -37,6 +36,6 @@ class AddressesController < ApplicationController
   private
 
   def address_params
-    params.require(:item).permit(:name, :address, :city, :state, :zip)
+    params.require(:address).permit(:name, :address, :city, :state, :zip)
   end
 end
