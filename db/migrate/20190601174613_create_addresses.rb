@@ -1,6 +1,7 @@
 class CreateAddresses < ActiveRecord::Migration[5.1]
   def change
     create_table :addresses do |t|
+      t.references :user, foreign_key: true
       t.string :address
       t.string :city
       t.string :state
@@ -9,9 +10,9 @@ class CreateAddresses < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    remove_column :users, :address
-    remove_column :users, :city
-    remove_column :users, :state
-    remove_column :users, :zip
+    remove_column :users, :address, :string
+    remove_column :users, :city, :string
+    remove_column :users, :state, :string
+    remove_column :users, :zip, :string
   end
 end
