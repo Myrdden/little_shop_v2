@@ -6,10 +6,6 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.integer :role
       t.boolean :active
       t.string :name
-      t.string :address
-      t.string :city
-      t.string :state
-      t.string :zip
 
       t.timestamps
     end
