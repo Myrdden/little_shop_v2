@@ -21,6 +21,8 @@ Rails.application.routes.draw do
     resources :orders, only: [:index, :show, :destroy]
   end
 
+  resources :addresses
+
   put '/users', to: "users#update"
 
   get '/login', to: 'sessions#new'
