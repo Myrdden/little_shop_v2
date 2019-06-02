@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get '/profile/edit', to: "users#edit"
 
   namespace :profile do
-    resources :orders, only: [:index, :show, :destroy]
+    resources :orders, only: [:index, :show, :destroy, :update]
   end
 
   resources :addresses, only: [:new, :edit, :create, :destroy]

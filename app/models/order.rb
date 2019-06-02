@@ -7,6 +7,10 @@ class Order < ApplicationRecord
 
   enum status: ["pending", "packaged", "shipped", "cancelled"]
 
+  def address
+    Address.find(self.address_id)
+  end
+
   def self.admin_dashboard_sort
     order("CASE orders.status
            WHEN 0 THEN 1

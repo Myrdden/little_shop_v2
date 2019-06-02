@@ -1,19 +1,77 @@
 <div class="container">
   <h1>Order: <%= @order.id %></h1>
-  <%= link_to "Cancel Order", profile_order_path(@order), method: :delete, class: "btn" if @order.pending? %>
+  <h3><%= @order.status %></h3>
+  <h5>
+    Shipping To: <%= @order.address.address %>, <%= @order.address.city %> <%= @order.address.state %> <%= @order.address.zip %> (<%= @order.address.name %>)
+  </h5>
+  <% if @order.pending? %>
+    <%= form_tag profile_order_path(@order.id), method: :put, style: "display: block" do |f| %>
+      <div style="display: inline-block; width: 12rem">
+        <%= select_tag :address_name, options_for_select(current_user.addresses.map {|adr| adr.name}) %>
+      </div>
+      <%= submit_tag "Change Address", class: "btn", style: "margin-left: 2rem" %>
+    <% end %>
+    <%= link_to "Cancel Order", profile_order_path(@order), method: :delete, class: "btn", style: "margin-top: 2rem" %>
+  <% end %>
   <p>Placed: <%= @order.created_at.to_date %></p>
   <p>Updated: <%= @order.updated_at.to_date %></p>
-  <p>Status: <%= @order.status %></p>
   <p>Number of Items: <%= @order.total_item_count %></p>
   <p>Total Cost: <%= @order.total_price %></p>
   <br><br>
-  <% @order.items.each do |item| %>
-  <section id="item-<%= item.id %>">
-    <p><%= item.name %></p>
-  <p>Price Per Item: <%= number_to_currency(item.price) %></p>
-  <p><%= item.description %></p>
-  <p>Subtotal: <%= number_to_currency(item.find_order_item(@order.id).price) %></p>
-  <img src="<%=item.image%>">
-  </section>
-  <% end %>
+  <div class="row">
+    <div class="col s4">
+      <% @items_left.each do |item| %>
+        <div class="item-<%= item.id %>-info card hoverable-dark red">
+          <div class="card-image">
+            <%= link_to item_path(item) do %>
+              <%= image_tag item.image, {class: "item-#{item.id}-image", alt: "#{item.name}-image"} %>
+            <% end %>
+          </div>
+          <div class="card-content">
+            <span class="card-title"><%= link_to item.name, item_path(item), class: "white-text" %></span>
+            <p><%= item.description %></p>
+            <p>Price per Item: <%= number_to_currency(item.price) %></p>
+            <p>Ordered: <%= item.find_order_item(@order.id).quantity %></p>
+            <p>Subtotal: <%= number_to_currency(item.price * item.find_order_item(@order.id).quantity) %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col s4">
+    <% @items_mid.each do |item| %>
+        <div class="item-<%= item.id %>-info card hoverable-dark red">
+          <div class="card-image">
+            <%= link_to item_path(item) do %>
+              <%= image_tag item.image, {class: "item-#{item.id}-image", alt: "#{item.name}-image"} %>
+            <% end %>
+          </div>
+          <div class="card-content">
+            <span class="card-title"><%= link_to item.name, item_path(item), class: "white-text" %></span>
+            <p><%= item.description %></p>
+            <p>Price per Item: <%= number_to_currency(item.price) %></p>
+            <p>Ordered: <%= item.find_order_item(@order.id).quantity %></p>
+            <p>Subtotal: <%= number_to_currency(item.price * item.find_order_item(@order.id).quantity) %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col s4">
+    <% @items_right.each do |item| %>
+        <div class="item-<%= item.id %>-info card hoverable-dark red">
+          <div class="card-image">
+            <%= link_to item_path(item) do %>
+              <%= image_tag item.image, {class: "item-#{item.id}-image", alt: "#{item.name}-image"} %>
+            <% end %>
+          </div>
+          <div class="card-content">
+            <span class="card-title"><%= link_to item.name, item_path(item), class: "white-text" %></span>
+            <p><%= item.description %></p>
+            <p>Price per Item: <%= number_to_currency(item.price) %></p>
+            <p>Ordered: <%= item.find_order_item(@order.id).quantity %></p>
+            <p>Subtotal: <%= number_to_currency(item.price * item.find_order_item(@order.id).quantity) %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>

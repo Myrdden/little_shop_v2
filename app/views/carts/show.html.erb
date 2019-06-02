@@ -4,11 +4,18 @@
 <% else %>
   <div class="row clearfix">
     <h3 class="cart-margins" style="display: inline-block">Your cart:</h3>
-    <%= link_to "Empty", cart_path, method: :delete, class: "right btn cart-margins" %>
+    <%= link_to "Empty", cart_path, method: :delete, class: "right btn cart-margins", style: "margin-right: 0" %>
     <% if current_user %>
-      <%= link_to "Check Out", checkout_path, method: :post, class: "right btn cart-margins", style: "margin-right: 2rem" %>
+      <%= form_tag checkout_path, method: :post, class: "right", style: "display: inline-block" do |f| %>
+        <%= submit_tag "Check Out", class: "right btn cart-margins" %>
+        <div class="right cart-margins" style="display: inline-block; width: 12rem">
+          <%= select_tag :address_name, options_for_select(current_user.addresses.map {|adr| adr.name}) %>
+        </div>
+      <% end %>
     <% else %>
-      <p class="right cart-margins">You must <%= link_to "login", login_path %> or <%= link_to "register", register_path %> to check out.</p>
+      <h5 class="right cart-margins" style="margin-right: 2rem">
+        You must <%= link_to "login", login_path %> or <%= link_to "register", register_path %> to check out.
+      </h5>
     <% end %>
   </div>
   <div class="row">
