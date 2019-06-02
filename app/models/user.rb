@@ -131,6 +131,10 @@ class User < ApplicationRecord
     update(role: 1)
   end
 
+  def active_addresses
+    self.addresses.where(active: true)
+  end
+
   # - name of the user who bought the most total items from me (pick one if there's a tie), and the total quantity
 
   # - top 3 users who have spent the most money on my items, and the total amount they've spent

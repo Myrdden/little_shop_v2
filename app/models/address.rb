@@ -6,4 +6,8 @@ class Address < ApplicationRecord
   validates :city, presence: true
   validates :state, presence: true
   validates :zip, presence: true
+
+  def used?
+    return Order.any? {|order| order.status != 0 && order.address_id == self.id}   
+  end
 end

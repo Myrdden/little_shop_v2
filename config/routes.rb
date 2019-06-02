@@ -23,6 +23,7 @@ Rails.application.routes.draw do
 
   resources :addresses, only: [:new, :edit, :create, :destroy]
   post '/addresses/:id', to: "addresses#update"
+  put '/addresses/disable/:id', to: "addresses#disable", as: :disable_address
 
   put '/users', to: "users#update"
 

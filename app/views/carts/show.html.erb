@@ -9,7 +9,7 @@
       <%= form_tag checkout_path, method: :post, class: "right", style: "display: inline-block" do |f| %>
         <%= submit_tag "Check Out", class: "right btn cart-margins" %>
         <div class="right cart-margins" style="display: inline-block; width: 12rem">
-          <%= select_tag :address_name, options_for_select(current_user.addresses.map {|adr| adr.name}) %>
+          <%= select_tag :address_name, options_for_select(current_user.active_addresses.map {|adr| adr.name}) %>
         </div>
       <% end %>
     <% else %>

@@ -9,6 +9,9 @@
             <p>Placed: <%= order.created_at.to_date %></p>
             <p>Updated: <%= order.updated_at.to_date %></p>
             <p>Status: <%= order.status %></p>
+            <p>Address: <%= order.address.address %>, <%= order.address.city %> <%= order.address.state %> 
+                <%= order.address.zip %> (<%= order.address.name %>)
+            </p>
             <p>Number of Items: <%= order.total_item_count %></p>
             <p>Order Cost: <%= order.total_price %></p>
           </div>

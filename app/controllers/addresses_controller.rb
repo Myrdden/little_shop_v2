@@ -33,6 +33,12 @@ class AddressesController < ApplicationController
     redirect_to profile_path
   end
 
+  def disable
+    Address.find(params[:id]).update(active: false)
+    flash[:note] = "Address has been disabled."
+    redirect_to profile_path
+  end
+
   private
 
   def address_params
