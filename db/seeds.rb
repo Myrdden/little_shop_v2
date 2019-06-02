@@ -11,19 +11,28 @@ OrderItem.destroy_all
 Item.destroy_all
 User.destroy_all
 
-admin_1 = User.create!(email: "megan@littleshop.com", password: "password", role: 2, active: true, name: "Megan", address: "1234 Zebra St", city: "Denver", state: "CO", zip: '90210')
-admin_2 = User.create!(email: "brian@littleshop.com", password: "password", role: 2, active: true, name: "Brian", address: "1234 Wahoo Way", city: "Denver", state: "CO", zip: '90210')
+admin_1 = User.create!(email: "megan@littleshop.com", password: "password", role: 2, active: true, name: "Megan")
+admin_2 = User.create!(email: "brian@littleshop.com", password: "password", role: 2, active: true, name: "Brian")
 
-merchant_1 = User.create!(email: "alex@gmail.com", password: "password", role: 1, active: true, name: "Alex", address: "1234 Protein Pl", city: "Burlington", state: "VT", zip: '64086')
-merchant_2 = User.create!(email: "aurie@gmail.com", password: "password", role: 1, active: true, name: "Aurie", address: "1234 Codeislife Ct", city: "Boulder", state: "CO", zip: '64086')
-merchant_3 = User.create!(email: "kyle@gmail.com", password: "password", role: 1, active: true, name: "Kyle", address: "1234 Roadrunner Rd", city: "Springfield", state: "VA", zip: '64086')
-merchant_4 = User.create!(email: "patrick@gmail.com", password: "password", role: 1, active: true, name: "Patrick", address: "1234 Boilermaker Blvd", city: "West Lafayette", state: "IN", zip: '64086')
+merchant_1 = User.create!(email: "alex@gmail.com", password: "password", role: 1, active: true, name: "Alex")
+merchant_2 = User.create!(email: "aurie@gmail.com", password: "password", role: 1, active: true, name: "Aurie")
+merchant_3 = User.create!(email: "kyle@gmail.com", password: "password", role: 1, active: true, name: "Kyle")
+merchant_4 = User.create!(email: "patrick@gmail.com", password: "password", role: 1, active: true, name: "Patrick")
 
-buyer_1 = User.create!(email: 'buyer1@gmail.com', password: 'password', active: true, name: 'Buyer 1', address: '1234 Test Dr', city: 'Denver', state: 'CO', zip: '80123', role: 0)
-buyer_2 = User.create!(email: 'buyer2@gmail.com', password: 'password', active: true, name: 'Buyer 2', address: '1234 Test Dr', city: 'New York', state: 'NY', zip: '80123', role: 0)
-buyer_3 = User.create!(email: 'buyer3@gmail.com', password: 'password', active: true, name: 'Buyer 3', address: '1234 Test Dr', city: 'Chicago', state: 'IL', zip: '80123', role: 0)
-buyer_4 = User.create!(email: 'buyer4@gmail.com', password: 'password', active: true, name: 'Buyer 4', address: '1234 Test Dr', city: 'Colorado Springs', state: 'CO', zip: '80123', role: 0)
-buyer_5 = User.create!(email: 'buyer5@gmail.com', password: 'password', active: true, name: 'Buyer 5', address: '1234 Test Dr', city: 'Los Angeles', state: 'CA', zip: '80123', role: 0)
+buyer_1 = User.create!(email: 'buyer1@gmail.com', password: 'password', active: true, name: 'Buyer 1', role: 0)
+buyer_1_address = buyer_1.addresses.create!(name: "Home", address: "1234 Test Dr.", city: 'Denver', state: 'CO', zip: '80123')
+buyer_2 = User.create!(email: 'buyer2@gmail.com', password: 'password', active: true, name: 'Buyer 2', role: 0)
+buyer_2_address = buyer_2.addresses.create!(name: "Home", address: "1234 Test Dr.", city: 'Denver', state: 'CO', zip: '80123')
+
+buyer_3 = User.create!(email: 'buyer3@gmail.com', password: 'password', active: true, name: 'Buyer 3', role: 0)
+buyer_3_address = buyer_3.addresses.create!(name: "Home", address: "1234 Test Dr.", city: 'Denver', state: 'CO', zip: '80123')
+
+buyer_4 = User.create!(email: 'buyer4@gmail.com', password: 'password', active: true, name: 'Buyer 4', role: 0)
+buyer_4_address = buyer_4.addresses.create!(name: "Home", address: "1234 Test Dr.", city: 'Denver', state: 'CO', zip: '80123')
+
+buyer_5 = User.create!(email: 'buyer5@gmail.com', password: 'password', active: true, name: 'Buyer 5', role: 0)
+buyer_5_address = buyer_5.addresses.create!(name: "Home", address: "1234 Test Dr.", city: 'Denver', state: 'CO', zip: '80123')
+
 
 mike = Item.create!(name: 'Mike Trout', active: true, price: 11.00, description: 'item_description', image: 'https://images-na.ssl-images-amazon.com/images/I/51GOReQ-ckL.jpg', inventory: 168, user: merchant_1)
 max = Item.create!(name: 'Max Scherzer', active: true, price: 12.50, description: 'item_description', image: 'https://images-na.ssl-images-amazon.com/images/I/51Q%2Bv6TFHZL.jpg', inventory: 140, user: merchant_3)
