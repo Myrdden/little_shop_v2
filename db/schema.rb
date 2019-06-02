@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20190601185913) do
     t.string "city"
     t.string "state"
     t.string "zip"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_addresses_on_user_id"
