@@ -4,7 +4,7 @@ class AddressesController < ApplicationController
   end
 
   def create
-    if current_user.items.create(address_params)
+    if current_user.addresses.create(address_params)
       flash[:note] = "Address Added."
       redirect_to profile_path
     else
