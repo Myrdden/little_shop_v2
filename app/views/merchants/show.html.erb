@@ -15,7 +15,11 @@
       <% @merchant.coupons.each do |coup| %>
         <div id="coupon-<%=coup.id%>">
           <h5><%= coup.name %>:
-            <%= coup.amount %><%= "%" if coup.percent %> off
+            <% if coup.percent %>
+              <%= coup.amount %>% off
+            <% else %>
+              <%= number_to_currency(coup.amount.to_f / 100) %> off
+            <% end %>
           </h5>
           <% if coup.used? %>
             <div style="margin-left: 2.5rem">

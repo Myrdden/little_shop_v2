@@ -1,5 +1,5 @@
 <p><%= @order.user.name%></p>
-<p><%= @order.user.address%></p>
+<p><%= @order.address%></p>
 
 <% @order_items.each do |order_item| %>
   <% if order_item.item.user_id == current_user.id %>

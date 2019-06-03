@@ -7,6 +7,6 @@ class Coupon < ApplicationRecord
   validates :amount, presence: true, numericality: {greater_than: 0}
 
   def used?
-    return orders.empty?
+    return CouponOrder.any? {|oi| oi.coupon_id == self.id}
   end
 end

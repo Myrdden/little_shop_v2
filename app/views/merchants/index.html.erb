@@ -13,7 +13,7 @@
               <%= merchant.name %>
             </span>
             <p>
-            From: <%= merchant.city %>, <%= merchant.state %><br>
+            From: <%#= merchant.city %>, <%#= merchant.state %><br>
             Date joined: <%= merchant.created_at.to_formatted_s(:long).slice(0...-6) %>
             </p>
           </div>
@@ -43,7 +43,7 @@
               <%= merchant.name %>
             </span>
             <p>
-            From: <%= merchant.city %>, <%= merchant.state %><br>
+            From: <%#= merchant.city %>, <%#= merchant.state %><br>
             Date joined: <%= merchant.created_at.to_formatted_s(:long).slice(0...-6) %>
             </p>
           </div>
@@ -73,7 +73,7 @@
               <%= merchant.name %>
             </span>
             <p>
-            From: <%= merchant.city %>, <%= merchant.state %><br>
+            From: <%#= merchant.city %>, <%#= merchant.state %><br>
             Date joined: <%= merchant.created_at.to_formatted_s(:long).slice(0...-6) %>
             </p>
           </div>
@@ -120,23 +120,23 @@
       <%= merchant.average_fulfillment_time.split[0..1].join(' ') %><br>
     <% end %><br>
   </div>
-
+  <!--
   <div id="top-3-states">
     Top 3 States:<br>
-    <% @merchants_top_three_states.each do |merchant| %>
-      <%= merchant.state %>:
-      <%= merchant.state_order_count %> orders<br>
-    <% end %><br>
+    <%# @merchants_top_three_states.each do |merchant| %>
+      <%#= merchant.state %>:
+      <%#= merchant.state_order_count %> orders<br>
+    <%# end %><br>
   </div>
 
   <div id="top-3-cities">
     Top 3 Cities:<br>
-    <% @merchants_top_three_cities.each do |merchant| %>
-      <%= merchant.city_state %>:
-      <%= merchant.city_state_order_count %> orders<br>
-    <% end %><br>
+    <%# @merchants_top_three_cities.each do |merchant| %>
+      <%#= merchant.city_state %>:
+      <%#= merchant.city_state_order_count %> orders<br>
+    <%# end %><br>
   </div>
-
+  -->
   <div id="top-3-orders">
     Top 3 Orders with Most Items:<br>
     <% @top_three_orders.each do |order| %>
