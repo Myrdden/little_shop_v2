@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :items
   has_many :orders
   has_many :addresses
+  accepts_nested_attributes_for :addresses
 
   enum role: ["default", "merchant", "admin"]
 

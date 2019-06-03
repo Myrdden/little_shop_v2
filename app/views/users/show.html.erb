@@ -6,22 +6,24 @@
   <h4>Addresses:</h4>
   <div style="margin: 2.5rem">
   <% @user.active_addresses.each do |adr| %>
-    <h5><%= adr.name %>:
-      <%= adr.address %>
-      <%= adr.city %>,
-      <%= adr.state %>,
-      <%= adr.zip %>
-    </h5>
-    <% if adr.used? %>
-      <div style="margin-left: 2.5rem">
-        <%= link_to "Disable", disable_address_path(adr.id), method: "put", class: "btn" %>
-      </div>
-    <% else %>
-      <div style="margin-left: 2.5rem">
-        <%= link_to "Edit", edit_address_path(adr.id), class: "btn" %>
-        <%= link_to "Delete", address_path(adr.id), method: "delete", class: "btn" %>
-      </div>
-    <% end %>
+    <div id="address-<%=adr.id%>">
+      <h5><%= adr.name %>:
+        <%= adr.address %>
+        <%= adr.city %>,
+        <%= adr.state %>
+        <%= adr.zip %>
+      </h5>
+      <% if adr.used? %>
+        <div style="margin-left: 2.5rem">
+          <%= link_to "Disable", disable_address_path(adr.id), method: "put", class: "btn" %>
+        </div>
+      <% else %>
+        <div style="margin-left: 2.5rem">
+          <%= link_to "Edit", edit_address_path(adr.id), class: "btn" %>
+          <%= link_to "Delete", address_path(adr.id), method: "delete", class: "btn" %>
+        </div>
+      <% end %>
+    </div>
   <% end %>
   </div>
   <%= link_to "Add Address", new_address_path, class: "btn" %>
