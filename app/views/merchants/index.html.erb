@@ -109,7 +109,7 @@
     Top 3 Fastest Fulfillments:<br>
     <% @merchants_quickest_fulfillments.each do |merchant| %>
       <%= merchant.name %>:
-      <%= merchant.fulfillment_time %><br>
+      <%= merchant.average_fulfillment_time.split[0..1].join(' ') %><br>
     <% end %><br>
   </div>
 
@@ -117,7 +117,7 @@
     Top 3 Slowest Fulfillments:<br>
     <% @merchants_slowest_fulfillments.each do |merchant| %>
       <%= merchant.name %>:
-      <%= merchant.fulfillment_time %><br>
+      <%= merchant.average_fulfillment_time.split[0..1].join(' ') %><br>
     <% end %><br>
   </div>
 
@@ -132,8 +132,8 @@
   <div id="top-3-cities">
     Top 3 Cities:<br>
     <% @merchants_top_three_cities.each do |merchant| %>
-      <%= merchant.city %>:
-      <%= merchant.city_order_count %> orders<br>
+      <%= merchant.city_state %>:
+      <%= merchant.city_state_order_count %> orders<br>
     <% end %><br>
   </div>
 
