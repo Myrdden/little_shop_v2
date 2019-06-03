@@ -38,7 +38,7 @@
           <%= number_to_currency(@coupon.amount.to_f / 100) %> off
         <% end %>
       </h4>
-      <h4>After Discounts: </h4>
+      <h4>After Discounts: <%= number_to_currency(@cart.discount_total(@coupon)) %></h4>
     </div>
   <% end %>
   <div class="row">
