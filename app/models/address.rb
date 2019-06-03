@@ -2,10 +2,7 @@ class Address < ApplicationRecord
   belongs_to :user  
 
   validates :name, presence: true #, uniqueness: true --How do?
-  validates :address, presence: true
-  validates :city, presence: true
-  validates :state, presence: true
-  validates :zip, presence: true
+  validates :address, :city, :state, :zip, presence: true
 
   def used?
     return Order.any? {|order| order.status != "pending" && order.address_id == self.id}   

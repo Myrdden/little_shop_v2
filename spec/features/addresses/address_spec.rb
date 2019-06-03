@@ -25,6 +25,20 @@ describe "Address CRUD" do
     expect(page).to have_content(expected_address)
   end
 
+  it "Create but Wrong" do
+    visit '/profile'
+    click_link "Add Address"
+
+    expect(current_path).to eq('/addresses/new')
+    fill_in "address[name]", with: "New"
+    fill_in "address[city]", with: "Test City"
+    select("CA", from: "address[state]")
+    click_on "Add Address"
+
+    expect(current_path).to eq('/addresses/new')
+    expect(page).to have_content("Invalid input.")
+  end
+
   it "Update" do
     visit '/profile'
     within "#address-#{@user_address.id}" do
@@ -38,6 +52,20 @@ describe "Address CRUD" do
     expect(current_path).to eq('/profile')
     expected_address = "Home: 11111 Test Rd. Testtown, CO 12345"
     expect(page).to have_content(expected_address)
+  end
+
+  it "Update but you Suck" do
+    visit '/profile'
+    within "#address-#{@user_address.id}" do
+      click_link "Edit"
+    end
+
+    expect(current_path).to eq("/addresses/#{@user_address.id}/edit")
+    fill_in "address[address]", with: ""
+    click_on "Update Address"
+
+    expect(current_path).to eq("/addresses/#{@user_address.id}/edit")
+    expect(page).to have_content ("Invalid input.")
   end
 
   it "Delete (if unused)" do

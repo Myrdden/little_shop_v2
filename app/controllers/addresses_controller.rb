@@ -4,7 +4,8 @@ class AddressesController < ApplicationController
   end
 
   def create
-    if current_user.addresses.create(address_params)
+    address = current_user.addresses.new(address_params)
+    if address.save
       flash[:note] = "Address Added."
       redirect_to profile_path
     else
@@ -22,7 +23,7 @@ class AddressesController < ApplicationController
       flash[:note] = "Address updated."
       redirect_to profile_path
     else
-      flash[:warn] = "Input invalid."
+      flash[:warn] = "Invalid input."
       redirect_to edit_address_path
     end
   end
