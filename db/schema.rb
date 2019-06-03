@@ -35,8 +35,6 @@ ActiveRecord::Schema.define(version: 20190603231611) do
     t.boolean "active", default: true
     t.integer "amount"
     t.boolean "percent"
-    t.bigint "order_items_id"
-    t.index ["order_items_id"], name: "index_coupons_on_order_items_id"
     t.index ["user_id"], name: "index_coupons_on_user_id"
   end
 
@@ -61,6 +59,8 @@ ActiveRecord::Schema.define(version: 20190603231611) do
     t.boolean "fulfilled"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "coupon_id"
+    t.index ["coupon_id"], name: "index_order_items_on_coupon_id"
     t.index ["item_id"], name: "index_order_items_on_item_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
   end
@@ -86,9 +86,9 @@ ActiveRecord::Schema.define(version: 20190603231611) do
   end
 
   add_foreign_key "addresses", "users"
-  add_foreign_key "coupons", "order_items", column: "order_items_id"
   add_foreign_key "coupons", "users"
   add_foreign_key "items", "users"
+  add_foreign_key "order_items", "coupons"
   add_foreign_key "order_items", "items"
   add_foreign_key "order_items", "orders"
   add_foreign_key "orders", "addresses"
