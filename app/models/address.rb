@@ -8,6 +8,6 @@ class Address < ApplicationRecord
   validates :zip, presence: true
 
   def used?
-    return Order.any? {|order| order.status != 0 && order.address_id == self.id}   
+    return Order.any? {|order| order.status != "pending" && order.address_id == self.id}   
   end
 end
