@@ -43,6 +43,8 @@ class MerchantsController < ApplicationController
     @merchant_top_items_customer = User.top_items_customer(@merchant)
     @merchant_top_three_money_customers = User.top_three_money_customers(@merchant)
 
+    @items_no_images = @merchant.items_no_images
+
     @items_left = []; @items_mid = []; @items_right = []
     i = 0
     @merchant.items.each do |item|

@@ -134,6 +134,10 @@ class User < ApplicationRecord
     update(role: 1)
   end
 
+  def items_no_images
+    items.where(image: [nil, ""])
+  end
+
   # - name of the user who bought the most total items from me (pick one if there's a tie), and the total quantity
 
   # - top 3 users who have spent the most money on my items, and the total amount they've spent

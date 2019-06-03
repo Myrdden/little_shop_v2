@@ -21,3 +21,4 @@
 input[type=text]:not(.browser-default) {background-color: rgba(0,0,0,0.2); color: #ffffff}
 input[type=password]:not(.browser-default) {background-color: rgba(0,0,0,0.2); color: #ffffff}
 .cart-margins {margin: 2rem 0 1rem 0}
+

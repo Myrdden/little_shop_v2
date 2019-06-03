@@ -14,6 +14,19 @@
 <% end %>
 
 <% if @dashboard %>
+  <div class="row">
+    <% if !@items_no_images.empty? %>
+      <div class="card-panel red">
+        <h5>Note! The following items have no images.<br>Click an entry to edit.</h5>
+        <ul>
+        <% @items_no_images.each do |item| %>
+          <li><h5><%= link_to item.name, edit_item_path(item.id)%></h5></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
   <h4>Your Orders</h4>
   <div class="row">
     <div class="col s4">
