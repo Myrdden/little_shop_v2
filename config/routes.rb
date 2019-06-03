@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   #these gotta go in a resource
   get '/cart', to: 'carts#show'
   post '/cart', to: 'carts#create'
+  put '/cart', to: 'carts#update'
   delete '/cart', to: 'carts#destroy'
   post '/checkout', to: 'profile/orders#create'
 

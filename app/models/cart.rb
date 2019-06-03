@@ -25,4 +25,8 @@ class Cart
   def items
     return Hash[@contents.map {|id,qnt| [Item.find(id), qnt]}]
   end
+
+  def total
+    return @contents.sum {|id,qnt| Item.find(id).price * qnt}
+  end
 end

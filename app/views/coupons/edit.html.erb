@@ -4,6 +4,8 @@
   <%= form_for @coupon, url: coupons_path, method: "post" do |f| %>
     <h4>Name:</h4>
     <%= f.text_field :name, size: "40" %>
+    <h4>Code:</h4>
+    <%= f.text_field :code, size: "10" %>
     <h4>Amount:</h4>
     <%= f.text_field :amount, size: "40" %>
     <p>

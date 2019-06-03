@@ -16,12 +16,38 @@
           <div class="right cart-margins" style="display: inline-block; width: 12rem">
             <%= select_tag :address_name, options_for_select(current_user.active_addresses.map {|adr| adr.name}) %>
           </div>
+          <h5 class="right cart-margins">Ship To:</h5>
         <% end %>
       <% end %>
     <% else %>
       <h5 class="right cart-margins" style="margin-right: 2rem">
         You must <%= link_to "login", login_path %> or <%= link_to "register", register_path %> to check out.
       </h5>
+    <% end %>
+  </div>
+  <div class="row">
+    <h4>Total: <%= number_to_currency(@cart.total) %></h4>
+  </div>
+  <% if @coupon %>
+    <div class="row">
+      <h4>
+        Coupon applied: [<%=@coupon.code%>] -> 
+        <% if @coupon.percent %>
+          <%= @coupon.amount %>% off
+        <% else %>
+          <%= number_to_currency(@coupon.amount.to_f / 100) %> off
+        <% end %>
+      </h4>
+      <h4>After Discounts: </h4>
+    </div>
+  <% end %>
+  <div class="row">
+    <%= form_tag cart_path, method: "put" do |f| %>
+      <h4 class="left" style="margin: 0 2rem 0 0">Enter Coupon Code:</h4>
+      <div class="left" style="display: inline-block; width: 15rem">
+        <%= text_field_tag :code %>
+      </div>
+      <%= submit_tag "Add Coupon", class: "left btn", style: "margin-left: 2rem" %>
     <% end %>
   </div>
   <div class="row">
@@ -33,7 +59,9 @@
           </div>
           <div class="card-stacked">
             <div class="card-content">
-              <%=item.name%>: <%=quantity%><BR>
+              <%=item.name%>: <%=quantity%><br>
+              <%=number_to_currency(item.price)%> per item<br>
+              Subtotal: <%=number_to_currency(item.price * quantity)%><br>
             </div>
             <div class="card-action center">
               <%= form_tag "/cart", method: "post" do |f| %>

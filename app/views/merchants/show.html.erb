@@ -14,7 +14,7 @@
     <div style="margin-bottom: 2.5rem">
       <% @merchant.coupons.each do |coup| %>
         <div id="coupon-<%=coup.id%>">
-          <h5><%= coup.name %>:
+          <h5><%= coup.name %>: [<%= coup.code %>] -> 
             <% if coup.percent %>
               <%= coup.amount %>% off
             <% else %>

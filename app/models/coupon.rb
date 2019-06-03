@@ -4,6 +4,7 @@ class Coupon < ApplicationRecord
   has_many :orders, through: :coupon_orders
 
   validates :name, presence: true
+  validates :code, presence: true, length: (2..10)
   validates :amount, presence: true, numericality: {greater_than: 0}
 
   def used?
