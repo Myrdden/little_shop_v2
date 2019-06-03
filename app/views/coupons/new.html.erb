@@ -1,0 +1,17 @@
+<div class="container">
+  <h2>Add Coupon:</h2>
+
+  <%= form_for @coupon, url: coupons_path, method: "post" do |f| %>
+    <h4>Name:</h4>
+    <%= f.text_field :name, size: "40" %>
+    <h4>Amount:</h4>
+    <%= f.text_field :amount, size: "40" %>
+    <p>
+      <label>
+        <%= f.check_box :percent %>
+        <span class="white-text" style="font-size: x-large">HECK</span>
+      </label>
+    </p>
+    <%= f.submit "Add Coupon", class: "btn", style: "margin-top: 2rem" %>
+  <% end %>
+</div>

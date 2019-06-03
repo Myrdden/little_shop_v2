@@ -4,6 +4,8 @@ class Order < ApplicationRecord
   has_many :order_items
   has_many :items, through: :order_items
   has_one :address
+  has_many :coupon_orders
+  has_many :coupons, through: :coupon_orders
 
   enum status: ["pending", "packaged", "shipped", "cancelled"]
 

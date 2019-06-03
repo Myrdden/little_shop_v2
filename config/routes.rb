@@ -25,6 +25,10 @@ Rails.application.routes.draw do
   post '/addresses/:id', to: "addresses#update"
   put '/addresses/disable/:id', to: "addresses#disable", as: :disable_address
 
+  resources :coupons, only: [:new, :edit, :create, :destroy]
+  post '/coupons/:id', to: "coupons#update"
+  put '/coupons/disable/:id', to: "coupons#disable", as: :disable_coupon
+
   put '/users', to: "users#update"
 
   get '/login', to: 'sessions#new'

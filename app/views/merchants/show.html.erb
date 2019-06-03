@@ -1,11 +1,5 @@
 <div class="container">
 <h4><%="Logged in as: " if @dashboard%><%= @merchant.name %> (<%= @merchant.email %>)</h4>
-<p style="margin-bottom: 2rem">
-  <%= @merchant.address %><br>
-  <%= @merchant.city %>,
-  <%= @merchant.state %>
-  <%= @merchant.zip %>
-</p>
 
 <%= link_to "Edit my Profile", profile_edit_path, class: "btn", style: "margin-bottom: 2rem" if @dashboard %>
 <%= link_to "View All Items", merchant_dashboard_items_path, class: "btn", style: "margin-bottom: 2rem" if @dashboard %>
@@ -15,6 +9,34 @@
 <% end %>
 
 <% if @dashboard %>
+  <h4>Coupons</h4>
+  <div class="row">
+    <div style="margin-bottom: 2.5rem">
+      <% @merchant.coupons.each do |coup| %>
+        <div id="coupon-<%=coup.id%>">
+          <h5><%= coup.name %>:
+            <%= coup.amount %><%= "%" if coup.percent %> off
+          </h5>
+          <% if coup.used? %>
+            <div style="margin-left: 2.5rem">
+              <%= link_to "Disable", disable_coupon_path(coup.id), method: "put", class: "btn" %>
+            </div>
+          <% else %>
+            <div style="margin-left: 2.5rem">
+              <%= link_to "Edit", edit_coupon_path(coup.id), class: "btn" %>
+              <%= link_to "Delete", coupon_path(coup.id), method: "delete", class: "btn" %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <% if @merchant.coupons.count <= 5 %>
+      <%= link_to "Add Coupon", new_coupon_path, class: "btn" %>
+    <% else %>
+      <h5>You have reached your limit of 5 coupons. Delete or disable one to add more.</h5>
+    <% end %>
+  </div>
+
   <h4>Your Orders</h4>
   <div class="row">
     <div class="col s4">
@@ -173,22 +195,24 @@
       Sold <%= @merchant_total_quantity_items_sold %> items, which is <%= @merchant_total_percentage_inventory_sold.round(2) %>% of your total inventory
     </div>
     <br>
+    <!--
     <div id="top-3-states-shipped">
       Top 3 States Shipped to:<br>
-      <% @merchant_top_three_states_shipped.each do |state| %>
-        <%= state.state %>
-        (<%= state.order_count %> orders)<br>
-      <% end %><br>
+      <%# @merchant_top_three_states_shipped.each do |state| %>
+        <%#= state.state %>
+        (<%#= state.order_count %> orders)<br>
+      <%# end %><br>
     </div>
     <br>
     <div id="top-3-cities-shipped">
       Top 3 Cities Shipped to:<br>
-      <% @merchant_top_three_cities_shipped.each do |city| %>
-        <%= city.city_state %>
-        (<%= city.order_count %> orders)<br>
-      <% end %><br>
+      <%# @merchant_top_three_cities_shipped.each do |city| %>
+        <%#= city.city_state %>
+        (<%#= city.order_count %> orders)<br>
+      <%# end %><br>
     </div>
     <br>
+    -->
     <div id="top-orders-customer">
       Most orders:<br>
       <% @merchant_top_orders_customer.each do |customer| %>
