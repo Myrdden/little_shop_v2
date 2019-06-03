@@ -52,6 +52,18 @@ describe "Address CRUD" do
   end
 
   it "Disable (if used)" do
+    create(:packaged, user: @user, address_id: @user_address.id, status: 2)
 
+    visit '/profile'
+    within "#address-#{@user_address.id}" do
+      expect(page).to_not have_content("Edit")
+      expect(page).to_not have_content("Delete")
+      expect(page).to have_content("Disable")
+      click_link "Disable"
+    end
+
+    expect(current_path).to eq('/profile')
+    expected_address = "Home: 12345 Test St. Testtown, CO 12345"
+    expect(page).to_not have_content(expected_address)
   end
 end
