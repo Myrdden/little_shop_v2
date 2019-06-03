@@ -79,11 +79,16 @@ RSpec.describe User, type: :model do
     end
 
     it ".top_three_fulfillments_fastest_and_slowest" do
-      expect(@users.top_three_fulfillments("asc")).to eq([@user_6, @user_1, @user_3])
-      expect(@users.top_three_fulfillments("desc")).to eq([@user_4, @user_3, @user_1])
+      high_avg_fulfillment_times = @users.top_three_fulfillments("asc").map { |user| user.average_fulfillment_time.split[0..1].join(' ') }
+      low_avg_fulfillment_times = @users.top_three_fulfillments("desc").map { |user| user.average_fulfillment_time.split[0..1].join(' ') }
+
+      expect(@users.top_three_fulfillments("asc")).to eq([@user_3, @user_6, @user_4])
+      expect(@users.top_three_fulfillments("desc")).to eq([@user_1, @user_4, @user_6])
+      expect(high_avg_fulfillment_times).to eq(["1 day", "2 days", "4 days"])
+      expect(low_avg_fulfillment_times).to eq(["6 days", "4 days", "2 days"])
     end
 
-    it ".top_three_orders_by_state_or_city" do
+    it ".top_three_orders_by_state" do
       order_item_10 = @order_5.order_items.create!(item_id: @item_2.id, quantity: 2, price: 40.00, fulfilled: true)
       order_item_11 = @order_6.order_items.create!(item_id: @item_2.id, quantity: 2, price: 40.00, fulfilled: true)
       order_item_12 = @order_7.order_items.create!(item_id: @item_4.id, quantity: 1, price: 100.00, fulfilled: true)
@@ -91,45 +96,54 @@ RSpec.describe User, type: :model do
       order_item_14 = @order_9.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
       order_item_15 = @order_10.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
 
-      states = @users.top_three_orders_by("state").map { |user| user.state }
-      order_count_per_state = @users.top_three_orders_by("state").map { |user| user.state_order_count }
-
-      cities = @users.top_three_orders_by("city").map { |user| user.city }
-      order_count_per_city = @users.top_three_orders_by("city").map { |user| user.city_order_count }
+      states = @users.top_three_orders_by_state.map { |user| user.state }
+      order_count_per_state = @users.top_three_orders_by_state.map { |user| user.state_order_count }
 
       expect(states).to eq ([@user_1.state, @user_6.state, @user_3.state])
       expect(states).to eq ([@user_4.state, @user_6.state, @user_3.state])
       expect(order_count_per_state).to eq ([5, 4, 1])
-      expect(cities).to eq ([@user_4.city, @user_1.city, @user_3.city])
-      expect(cities).to eq ([@user_6.city, @user_1.city, @user_3.city])
-      expect(order_count_per_city).to eq ([6, 3, 1])
+    end
+
+    it '.top_three_orders_by_city_state' do
+      order_item_10 = @order_5.order_items.create!(item_id: @item_2.id, quantity: 2, price: 40.00, fulfilled: true)
+      order_item_11 = @order_6.order_items.create!(item_id: @item_2.id, quantity: 2, price: 40.00, fulfilled: true)
+      order_item_12 = @order_7.order_items.create!(item_id: @item_4.id, quantity: 1, price: 100.00, fulfilled: true)
+      order_item_13 = @order_8.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
+      order_item_14 = @order_9.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
+      order_item_15 = @order_10.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
+
+      city_states = @users.top_three_orders_by_city_state.map { |user| user.city_state }
+      order_count_per_city_state = @users.top_three_orders_by_city_state.map { |user| user.city_state_order_count }
+
+      expect(city_states).to eq (["Denver, NY", "Denver, CO", "Colorado Springs, CO"])
+      expect(order_count_per_city_state).to eq ([4, 3, 2])
     end
 
     it '.top_three_states_shipped_to' do
-      order_item_10 = @order_4.order_items.create!(item_id: @item_10.id, quantity: 2, price: 40.00, fulfilled: true)
-      order_item_11 = @order_4.order_items.create!(item_id: @item_10.id, quantity: 2, price: 40.00, fulfilled: true)
-      order_item_12 = @order_3.order_items.create!(item_id: @item_10.id, quantity: 1, price: 100.00, fulfilled: true)
+      order_item_10 = @order_2.order_items.create!(item_id: @item_10.id, quantity: 2, price: 40.00, fulfilled: true)
+      order_item_11 = @order_5.order_items.create!(item_id: @item_10.id, quantity: 2, price: 40.00, fulfilled: true)
+      order_item_12 = @order_6.order_items.create!(item_id: @item_10.id, quantity: 1, price: 100.00, fulfilled: true)
       order_item_13 = @order_9.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
-      order_item_14 = @order_9.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
+      order_item_14 = @order_10.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
 
       states = @users.top_three_states_shipped_to(@user_6).map { |user| user.state }
       order_count_per_state = @users.top_three_states_shipped_to(@user_6).map { |user| user.order_count }
 
-      expect(states).to eq([@user_9.state, @user_10.state, @user_8.state])
+      expect(states).to eq([@user_9.state, @user_10.state, @user_2.state])
       expect(order_count_per_state).to eq([3, 2, 1])
     end
 
     it '.top_three_cities_shipped_to' do
-      order_item_10 = @order_4.order_items.create!(item_id: @item_10.id, quantity: 2, price: 40.00, fulfilled: true)
-      order_item_11 = @order_4.order_items.create!(item_id: @item_10.id, quantity: 2, price: 40.00, fulfilled: true)
-      order_item_12 = @order_3.order_items.create!(item_id: @item_10.id, quantity: 1, price: 100.00, fulfilled: true)
+      order_item_10 = @order_2.order_items.create!(item_id: @item_10.id, quantity: 2, price: 40.00, fulfilled: true)
+      order_item_11 = @order_5.order_items.create!(item_id: @item_10.id, quantity: 2, price: 40.00, fulfilled: true)
+      order_item_12 = @order_6.order_items.create!(item_id: @item_10.id, quantity: 1, price: 100.00, fulfilled: true)
       order_item_13 = @order_9.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
-      order_item_14 = @order_9.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
+      order_item_14 = @order_10.order_items.create!(item_id: @item_10.id, quantity: 100, price: 100.00, fulfilled: true)
 
       cities = @users.top_three_cities_shipped_to(@user_6).map { |user| user.city_state }
       order_count_per_city = @users.top_three_cities_shipped_to(@user_6).map { |user| user.order_count }
 
-      expect(cities).to eq(["Billings, MT", "Boise, ID", "Cheyenne, WY"])
+      expect(cities).to eq(["Kansas City, KS", "Kansas City, MO", "Springfield, VA"])
       expect(order_count_per_city).to eq([3, 2, 1])
     end
 
@@ -145,8 +159,10 @@ RSpec.describe User, type: :model do
       order_item_10 = @order_8.order_items.create!(item_id: @item_1.id, quantity: 2, price: 40.00, fulfilled: true)
       order_item_11 = @order_10.order_items.create!(item_id: @item_1.id, quantity: 2, price: 50.00, fulfilled: true)
 
-      expect(@users.top_three_money_customers(@user_1)).to eq([@user_2, @user_10, @user_9])
+      customer_money_spent = @users.top_three_money_customers(@user_1).map { |customer| customer.money_total }
 
+      expect(@users.top_three_money_customers(@user_1)).to eq([@user_2, @user_10, @user_9])
+      expect(customer_money_spent).to eq([110, 100, 80])
     end
   end
 

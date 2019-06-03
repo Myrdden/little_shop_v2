@@ -1,4 +1,5 @@
 require 'rails_helper'
+
 describe "as a merchant" do
   describe "when I visit my dashboard page" do
     before :each do
@@ -33,14 +34,18 @@ describe "as a merchant" do
 
     it "does not display for visitors or users" do
       visit root_path
+
       expect(page).to have_no_link("Dashboard")
 
       click_link "Login"
+
       fill_in 'email', with: @user1.email
       fill_in 'password', with: @user1.password
+
       click_button "Log In"
 
       visit root_path
+
       expect(page).to have_no_link("Dashboard")
     end
 
@@ -48,12 +53,14 @@ describe "as a merchant" do
       visit root_path
 
       click_link "Login"
+
       fill_in 'email', with: @merchant.email
       fill_in 'password', with: @merchant.password
 
       click_button "Log In"
 
       click_link "Dashboard"
+
       expect(current_path).to eq(dashboard_path)
 
       expect(page).to have_content(@merchant.name)
@@ -61,9 +68,6 @@ describe "as a merchant" do
       expect(page).to have_content(@merchant.address)
       expect(page).to have_content(@merchant.city)
       expect(page).to have_content(@merchant.state)
-      
-
-
 
       within "#item-#{@itemA.id}" do
         expect(page).to have_content(@itemA.name)
@@ -104,17 +108,22 @@ describe "as a merchant" do
       click_button "Log In"
 
       click_link "Dashboard"
+
       expect(current_path).to eq(dashboard_path)
 
       within "#item-#{@itemA.id}" do
         click_on "Edit"
       end
+
       expect(current_path).to eq("/items/#{@itemA.id}/edit")
+
       fill_in 'item[name]', with: "ItemAHHHH"
+
       click_on "Update Item"
 
       expect(current_path).to eq('/dashboard')
       expect(page).to have_content("Item updated.")
+
       within "#item-#{@itemA.id}" do
         expect(page).to have_content("ItemAHHHH")
       end
@@ -124,11 +133,14 @@ describe "as a merchant" do
       visit root_path
 
       click_link "Login"
+
       fill_in 'email', with: @merchant.email
       fill_in 'password', with: @merchant.password
+
       click_button "Log In"
 
       click_link "Dashboard"
+
       expect(current_path).to eq(dashboard_path)
 
       within "#item-#{@itemA.id}" do
@@ -137,6 +149,7 @@ describe "as a merchant" do
 
       expect(current_path).to eq('/dashboard')
       expect(page).to have_content("Item has been disabled.")
+
       within "#item-#{@itemA.id}" do
         expect(page).to_not have_content("Disable")
         expect(page).to have_content("Enable")
@@ -148,21 +161,25 @@ describe "as a merchant" do
 
       expect(current_path).to eq('/dashboard')
       expect(page).to have_content("Item has been enabled.")
+
       within "#item-#{@itemA.id}" do
         expect(page).to_not have_content("Enable")
         expect(page).to have_content("Disable")
       end
     end
 
-    it "can edit an item" do
+    it "can delete an item" do
       visit root_path
 
       click_link "Login"
+
       fill_in 'email', with: @merchant.email
       fill_in 'password', with: @merchant.password
+
       click_button "Log In"
 
       click_link "Dashboard"
+
       expect(current_path).to eq(dashboard_path)
 
       within "#item-#{@itemA.id}" do
@@ -176,10 +193,14 @@ describe "as a merchant" do
 
     it "displays a list of pending orders that contain merchant items" do
       visit root_path
+
       click_link "Login"
+
       fill_in 'email', with: @merchant_1.email
       fill_in 'password', with: @merchant_1.password
+
       click_button "Log In"
+
       expect(page).to have_content(@order_1.id)
       expect(page).to have_content(@order_1.created_at.to_formatted_s(:long).slice(0...-6))
       expect(page).to have_content(@order_1.total_item_count)
@@ -193,13 +214,32 @@ describe "as a merchant" do
       # expect(current_path).to eq(merchant_order_path(@order_1))
     end
 
+    it "I see a link to view my items" do
+      visit root_path
+
+      click_link "Login"
+
+      fill_in 'email', with: @merchant_1.email
+      fill_in 'password', with: @merchant_1.password
+
+      click_button "Log In"
+
+      click_link "Dashboard"
+
+      expect(page).to have_link("View All Items")
+
+      click_link("View All Items")
+
+      expect(current_path).to eq(merchant_dashboard_items_path)
+    end
+
     describe "merchant statistics" do
       before :each do
         @merchant_3 = create(:merchant)
-        @user_2 = create(:user, city: "Billings", state: "MT")
-        @user_3 = create(:user, city: "Denver", state: "CO")
-        @user_4 = create(:user, city: "Colorado Springs", state: "CO")
-        @user_5 = create(:user, city: "Cheyenne", state: "WY")
+        @user_2 = create(:user, name: "aa", city: "Billings", state: "MT")
+        @user_3 = create(:user, name: "bb", city: "Denver", state: "CO")
+        @user_4 = create(:user, name: "cc", city: "Colorado Springs", state: "CO")
+        @user_5 = create(:user, name: "dd", city: "Cheyenne", state: "WY")
 
         @item_5 = create(:item, inventory: 15, user: @merchant_3)
         @item_6 = create(:item, inventory: 20, user: @merchant_3)
@@ -303,11 +343,11 @@ describe "as a merchant" do
       it 'i see stats with the top 3 customers for money paid' do
         within "#merchant-stats" do
           within "#top-three-money-customers" do
-            expect(@user_1.name).to appear_before(@user_4.name)
-            expect(@user_4.name).to appear_before(@user_2.name)
-            expect(page).to have_content(6000.00)
-            expect(page).to have_content(1060.00)
-            expect(page).to have_content(500.00)
+            expect(@user_1.name).to appear_before(@user_2.name)
+            expect(@user_2.name).to appear_before(@user_4.name)
+            expect(page).to have_content(21000.00)
+            expect(page).to have_content(2500.00)
+            expect(page).to have_content(1120.00)
           end
         end
       end
