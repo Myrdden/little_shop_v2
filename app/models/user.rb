@@ -6,6 +6,8 @@ class User < ApplicationRecord
   has_many :addresses
   accepts_nested_attributes_for :addresses
 
+  has_many :coupons
+
   enum role: ["default", "merchant", "admin"]
 
   validates :name, presence: true, length: (2..51)
@@ -141,7 +143,6 @@ class User < ApplicationRecord
   def upgrade_to_merchant
     update(role: 1)
   end
-<<<<<<< HEAD
 
   def active_addresses
     self.addresses.where(active: true)
@@ -150,6 +151,4 @@ class User < ApplicationRecord
   # - name of the user who bought the most total items from me (pick one if there's a tie), and the total quantity
 
   # - top 3 users who have spent the most money on my items, and the total amount they've spent
-=======
->>>>>>> master
 end
