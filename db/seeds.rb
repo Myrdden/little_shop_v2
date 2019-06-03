@@ -113,3 +113,5 @@ order_item_35 = OrderItem.create!(item: tony, order: order_17, quantity: 1, pric
 order_item_36 = OrderItem.create!(item: cal, order: order_18, quantity: 1, price: cal.price, fulfilled: true, created_at: 2.days.ago, updated_at: 1.days.ago)
 order_item_37 = OrderItem.create!(item: ken, order: order_19, quantity: 1, price: ken.price, fulfilled: true, created_at: 5.days.ago, updated_at: 1.days.ago)
 order_item_38 = OrderItem.create!(item: ryan, order: order_20, quantity: 1, price: ryan.price, fulfilled: true, created_at: 4.days.ago, updated_at: 1.days.ago)
+
+coupon_1 = Coupon.create!(user_id: merchant_1.id, name: "Coupon 1", code: "WOW", amount: 50, percent: true)
