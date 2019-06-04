@@ -47,6 +47,7 @@ class Cart
           price -= (price * (coupon.amount.to_f / 100))
         else
           price -= (dollar_off / 100)
+          price = 0.0 if price < 0.0
         end
       end
       price * qnt

@@ -3,11 +3,15 @@ class Profile::OrdersController < ApplicationController
   end
 
   def create
+    @cart = Cart.new(session[:cart])
+    if @cart.contents.empty?
+      flash[:warn] = "Your cart is empty"
+      redirect_to cart_path
+    end
     order = Order.new user_id: current_user.id, status: 0, address_id: Address.find_by(name: params[:address_name]).id
     order.save
-    @cart = Cart.new(session[:cart])
-    coupon = Coupon.find(session[:coupon_id])
-    dollar_off = @cart.dollar_off_price(coupon)
+    coupon = session[:coupon_id] ? Coupon.find(session[:coupon_id]) : nil
+    dollar_off = coupon ? @cart.dollar_off_price(coupon) : nil
     items = @cart.items
     items.each do |item, quantity|
       price = item.price
@@ -16,6 +20,7 @@ class Profile::OrdersController < ApplicationController
           price -= (price * (coupon.amount.to_f / 100))
         else
           price -= (dollar_off / 100)
+          price = 0.0 if price < 0.0
         end
       end
       order_item = OrderItem.new item_id: item.id, order_id: order.id,
@@ -23,6 +28,7 @@ class Profile::OrdersController < ApplicationController
       order_item.save
     end
     session[:cart] = nil
+    session[:coupon_id] = nil
 
     flash[:success] = "Order has been placed."
     redirect_to profile_orders_path
