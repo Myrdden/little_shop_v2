@@ -6,7 +6,7 @@
   </h5>
   <% if @order.pending? %>
     <%= form_tag profile_order_path(@order.id), method: :put, style: "display: block" do |f| %>
-      <div style="display: inline-block; width: 12rem">
+      <div id="address-select" style="display: inline-block; width: 12rem">
         <%= select_tag :address_name, options_for_select(current_user.active_addresses.map {|adr| adr.name}) %>
       </div>
       <%= submit_tag "Change Address", class: "btn", style: "margin-left: 2rem" %>
