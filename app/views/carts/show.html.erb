@@ -31,7 +31,7 @@
   <% if @coupon %>
     <div class="row">
       <h4>
-        Coupon applied: [<%=@coupon.code%>] -> 
+        Coupon Applied: [<%=@coupon.code%>] -> 
         <% if @coupon.percent %>
           <%= @coupon.amount %>% off
         <% else %>
@@ -41,7 +41,7 @@
       <h4>After Discounts: <%= number_to_currency(@cart.discount_total(@coupon)) %></h4>
     </div>
   <% end %>
-  <div class="row">
+  <div id="coupon-input" class="row">
     <%= form_tag cart_path, method: "put" do |f| %>
       <h4 class="left" style="margin: 0 2rem 0 0">Enter Coupon Code:</h4>
       <div class="left" style="display: inline-block; width: 15rem">

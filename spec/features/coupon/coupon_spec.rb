@@ -111,6 +111,5 @@ describe "Coupon CRUD" do
     expect(current_path).to eq('/dashboard')
     expect(page).to have_content("Coupon has been disabled.")
     expect(page).to_not have_css("#coupon-#{@coupon.id}")
-
   end
 end

@@ -10,10 +10,5 @@ describe "Address-Order" do
                                     image: "https://tradersofafrica.com/img/no-product-photo.jpg", inventory: 10)
 
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
-
-    @o1 = create(:packaged, user: @user, address_id: @user_adr.id, status: 0)
-    @o2 = create(:packaged, user: @user, address_id: @user_adr.id, status: 1)
-    @o3 = create(:packaged, user: @user, address_id: @user_adr.id, status: 2)
-    @o4 = create(:packaged, user: @user, address_id: @user_adr.id, status: 3)
   end
 end
