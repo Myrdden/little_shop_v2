@@ -32,7 +32,8 @@ class Cart
 
   def dollar_off_price(coupon)
     coupon ||= Coupon.find(session[:coupon_id])
-    count = @contents.count {|id,qnt| Item.find(id).user_id == coupon.user_id}
+    count = 0
+    @contents.each {|id,qnt| count += qnt if Item.find(id).user_id == coupon.user_id}
     return count == 0 ? coupon.amount : coupon.amount.to_f / count
   end
 
@@ -42,11 +43,10 @@ class Cart
       item = Item.find(id)
       price = item.price
       if item.user_id == coupon.user_id
-        binding.pry
         if coupon.percent
           price -= (price * (coupon.amount.to_f / 100))
         else
-          price -= dollar_off 
+          price -= (dollar_off / 100)
         end
       end
       price * qnt
