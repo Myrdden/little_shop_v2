@@ -42,13 +42,14 @@ class Cart
       item = Item.find(id)
       price = item.price
       if item.user_id == coupon.user_id
+        binding.pry
         if coupon.percent
-          price -= (price / coupon.amount)
+          price -= (price * (coupon.amount.to_f / 100))
         else
           price -= dollar_off 
         end
       end
-      return price * quantity
+      price * qnt
     end
   end
 end
