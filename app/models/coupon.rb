@@ -3,7 +3,7 @@ class Coupon < ApplicationRecord
   has_many :order_items
 
   validates :name, presence: true
-  validates :code, presence: true, length: (2..10)
+  validates :code, presence: true, length: (2..10), uniqueness: true
   validates :amount, presence: true, numericality: {greater_than: 0}
 
   def used?
