@@ -6,10 +6,20 @@ class Profile::OrdersController < ApplicationController
     order = Order.new user_id: current_user.id, status: 0, address_id: Address.find_by(name: params[:address_name]).id
     order.save
     @cart = Cart.new(session[:cart])
+    coupon = Coupon.find(session[:coupon_id])
+    dollar_off = @cart.dollar_off_price(coupon)
     items = @cart.items
     items.each do |item, quantity|
+      price = item.price
+      if coupon && (coupon.user_id == item.user_id)
+        if coupon.percent
+          price -= (price * (coupon.amount.to_f / 100))
+        else
+          price -= (dollar_off / 100)
+        end
+      end
       order_item = OrderItem.new item_id: item.id, order_id: order.id,
-        quantity: quantity, price: (item.price * quantity)
+        quantity: quantity, price: (price * quantity), coupon_id: (coupon ? coupon.id : nil)
       order_item.save
     end
     session[:cart] = nil
