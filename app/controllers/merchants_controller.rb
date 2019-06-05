@@ -58,7 +58,7 @@ class MerchantsController < ApplicationController
 
     @orders_left = []; @orders_mid = []; @orders_right = []
     i = 0
-    @merchant.pending_orders.each do |order|
+    @merchant.all_orders.each do |order|
       case i
       when 0; @orders_left << order
       when 1; @orders_mid << order

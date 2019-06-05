@@ -23,6 +23,7 @@
   </div>
 
   <div class="row">
+    <h5>You have <%= Order.count_unfulfilled(@merchant) %> unfulfilled orders worth <%= number_to_currency(Order.sum_unfulfilled(@merchant)) %></h5>
     <% if !@items_no_images.empty? %>
       <div class="card-panel red">
         <h5>Note! The following items have no images.<br>Click an entry to edit.</h5>
@@ -72,11 +73,11 @@
     <div class="col s4">
       <% @orders_left.each do |order| %>
         <div class="card-panel red">
-
           <h5>Order #<%= link_to order.id, merchant_order_path(order)%></h5>
           <% if order.exceeds_inventory?(@merchant) %>
             <h5>!!! Exceeds Inventory !!!</h5>
           <% end %>
+          Status: <%= order.status.capitalize %><br>
           Placed On: <%= order.created_at.to_formatted_s(:long).slice(0..-6) %><br>
           Total Order Items: <%= order.total_item_count %><br>
           Order Total Price: $<%= '%.2f' % order.total_price %>
@@ -87,7 +88,11 @@
     <div class="col s4">
       <% @orders_mid.each do |order| %>
         <div class="card-panel red">
-          <h5>Order #<%= link_to order.id, merchant_order_path(order) %></h5>
+          <h5>Order #<%= link_to order.id, merchant_order_path(order)%></h5>
+          <% if order.exceeds_inventory?(@merchant) %>
+            <h5>!!! Exceeds Inventory !!!</h5>
+          <% end %>
+          Status: <%= order.status.capitalize %><br>
           Placed On: <%= order.created_at.to_formatted_s(:long).slice(0..-6) %><br>
           Total Order Items: <%= order.total_item_count %><br>
           Order Total Price: $<%= '%.2f' % order.total_price %>
@@ -98,7 +103,11 @@
     <div class="col s4">
       <% @orders_right.each do |order| %>
         <div class="card-panel red">
-          <h5>Order #<%= link_to order.id, merchant_order_path(order) %></h5>
+          <h5>Order #<%= link_to order.id, merchant_order_path(order)%></h5>
+          <% if order.exceeds_inventory?(@merchant) %>
+            <h5>!!! Exceeds Inventory !!!</h5>
+          <% end %>
+          Status: <%= order.status.capitalize %><br>
           Placed On: <%= order.created_at.to_formatted_s(:long).slice(0..-6) %><br>
           Total Order Items: <%= order.total_item_count %><br>
           Order Total Price: $<%= '%.2f' % order.total_price %>
@@ -210,8 +219,9 @@
       </div>
     <% end %>
   </div>
+</div>
 
-<section>
+<div class="row">
   Merchant Statistics:<br>
   <br>
   <section id="merchant-stats">
@@ -270,5 +280,5 @@
     </div>
     <br>
   </section>
-</section>
+</div>
 </div>

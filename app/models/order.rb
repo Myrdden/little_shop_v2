@@ -24,7 +24,6 @@ class Order < ApplicationRecord
           .group('orders.id')
           .order('order_item_quantity desc')
           .limit(3)
-
   end
 
   def ship
@@ -45,7 +44,6 @@ class Order < ApplicationRecord
 ## Any is active record, unsure on all
   def all_fulfilled?
     order_items.all?{|order_item| order_item.fulfilled == true }
-
   end
 
   def total_item_count
@@ -68,6 +66,14 @@ class Order < ApplicationRecord
   end
 
   def exceeds_inventory?(merchant)
-    self.order_items.any? {|orditm| orditm.item.user_id == merchant.id && orditm.item.inventory < orditm.quantity}
+    order_items.any? {|orditm| orditm.item.user_id == merchant.id && orditm.item.inventory < orditm.quantity}
+  end
+
+  def self.count_unfulfilled(merchant)
+    joins(order_items: :item).where("items.user_id = #{merchant.id} AND order_items.fulfilled = false").count
+  end
+
+  def self.sum_unfulfilled(merchant)
+    joins(order_items: :item).where("items.user_id = #{merchant.id} AND order_items.fulfilled = false").sum("order_items.price")
   end
 end

@@ -108,6 +108,12 @@ class User < ApplicationRecord
     .distinct.order(:id)
   end
 
+  def all_orders
+    Order.joins(items: :order_items).select('orders.*', 'items.user_id')
+    .where('items.user_id' => self.id)
+    .distinct.order(:id)
+  end
+
   def top_five_sold
     items.select('items.*, SUM(order_items.quantity) AS total_quantity')
     .joins(:orders)
