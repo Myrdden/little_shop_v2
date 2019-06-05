@@ -22,6 +22,19 @@
     <% end %>
   </div>
 
+  <div class="row">
+    <% if !@items_no_images.empty? %>
+      <div class="card-panel red">
+        <h5>Note! The following items have no images.<br>Click an entry to edit.</h5>
+        <ul>
+        <% @items_no_images.each do |item| %>
+          <li><h5><%= link_to item.name, edit_item_path(item.id)%></h5></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
   <h4>Coupons</h4>
   <div class="row">
     <div style="margin-bottom: 2.5rem">
@@ -61,7 +74,9 @@
         <div class="card-panel red">
 
           <h5>Order #<%= link_to order.id, merchant_order_path(order)%></h5>
-
+          <% if order.exceeds_inventory?(@merchant) %>
+            <h5>!!! Exceeds Inventory !!!</h5>
+          <% end %>
           Placed On: <%= order.created_at.to_formatted_s(:long).slice(0..-6) %><br>
           Total Order Items: <%= order.total_item_count %><br>
           Order Total Price: $<%= '%.2f' % order.total_price %>

@@ -1,18 +1,39 @@
-<p><%= @order.user.name%></p>
-<p><%= @order.address%></p>
-
-<% @order_items.each do |order_item| %>
-  <% if order_item.item.user_id == current_user.id %>
-<section id="item-<%=order_item.item.id%>">
-  <%= link_to order_item.item.name, item_path(order_item.item.id) %>
-  <img src="<%=order_item.item.image%>">
-  <p>Price: <%= order_item.price.fdiv(order_item.quantity).round(2) %></p>
-  <p>Quantity: <%= order_item.quantity %></p>
-  <p><%= "Order Fulfilled" if order_item.fulfilled %></p>
-  <%= button_to "Fulfill Order", "/merchants/orders/fulfill/#{@order.id}", method: :patch, params: {order_item: order_item.id} if order_item.item.inventory >= order_item.quantity && !order_item.fulfilled  %>
-  <% if order_item.item.inventory < order_item.quantity && !order_item.fulfilled %>
-  <h2 style="color:red;">"Insufficient Inventory"</h2>
+<div class="container">
+  <h1>Order: <%= @order.id %></h1>
+  <h3><%= @order.status.capitalize %></h3>
+  <h4>Placed: <%= @order.created_at.to_date %></h4>
+  <% if @order.updated_at != @order.created_at %>
+    <h4>Updated: <%= @order.updated_at.to_date %></h4>
   <% end %>
-</section>
-<% end %>
-<% end %>
+  <h4>Total Cost: <%= number_to_currency(@order.total_price) %></h4>
+  <br><br>
+  <div class="row">
+    <% @order_items.each do |order_item| %>
+      <% if order_item.item.user_id == current_user.id %>
+        <div id="item-<%=order_item.item.id%>" class="card hoverable-dark red">
+          <div class="card-image">
+            <%= link_to item_path(order_item.item) do %>
+              <%= image_tag order_item.item.image, {class: "item-#{order_item.item.id}-image", alt: "#{order_item.item.name}-image"} %>
+            <% end %>
+          </div>
+          <div class="card-content">
+            <span class="card-title"><%= link_to order_item.item.name, item_path(order_item.item), class: "white-text" %></span>
+            <p>Price per Item: <%= number_to_currency(order_item.price / order_item.quantity) %> 
+              <%= "(Discounted)" if order_item.coupon && (order_item.item.user_id == order_item.coupon.user_id) %></p>
+            <p>Ordered: <%= order_item.quantity %></p>
+            <p>Subtotal: <%= number_to_currency(order_item.price) %></p>
+            <% if order_item.fulfilled %>
+              <h5>Order Fulfulled</h5>
+            <% else %>
+              <% if order_item.item.inventory >= order_item.quantity %>
+                <%= button_to("Fulfill Order", "/merchants/orders/fulfill/#{@order.id}", method: :patch, class: "btn", params: {order_item: order_item.id}) %>
+              <% else %>
+                <h5> Insufficient Inventory</h5>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

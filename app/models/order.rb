@@ -66,4 +66,8 @@ class Order < ApplicationRecord
       end
     end
   end
+
+  def exceeds_inventory?(merchant)
+    self.order_items.any? {|orditm| orditm.item.user_id == merchant.id && orditm.item.inventory < orditm.quantity}
+  end
 end

@@ -1,17 +1,44 @@
-<h1>Order: <%= @order.id %></h1>
-<%= link_to "Cancel Order", profile_order_path(@order), method: :delete if @order.pending? %>
-<p>Placed: <%= @order.created_at.to_date %></p>
-<p>Updated: <%= @order.updated_at.to_date %></p>
-<p>Status: <%= @order.status %></p>
-<p>Number of Items: <%= @order.total_item_count %></p>
-<p>Total Cost: <%= @order.total_price %></p>
-<br><br>
-<% @order.items.each do |item| %>
-<section id="item-<%= item.id %>">
-  <p><%= item.name %></p>
-<p>Price Per Item: <%= number_to_currency(item.price) %></p>
-<p><%= item.description %></p>
-<p>Subtotal: <%= number_to_currency(item.find_order_item(@order.id).price) %></p>
-<img src="<%=item.image%>">
-</section>
-<% end %>
+<div class="container">
+  <h1>Order: <%= @order.id %>, <%= @order.total_item_count %> items</h1>
+  <h3><%= @order.status.capitalize %></h3>
+  <h5>
+    Shipping To: <%= @order.address.address %>, <%= @order.address.city %> <%= @order.address.state %> <%= @order.address.zip %> (<%= @order.address.name %>)
+  </h5>
+  <% if @order.pending? %>
+    <%= form_tag profile_order_path(@order.id), method: :put, style: "display: block" do |f| %>
+      <div id="address-select" style="display: inline-block; width: 12rem">
+        <%= select_tag :address_name, options_for_select(current_user.active_addresses.map {|adr| adr.name}) %>
+      </div>
+      <%= submit_tag "Change Address", class: "btn", style: "margin-left: 2rem" %>
+    <% end %>
+    <%= link_to "Cancel Order", profile_order_path(@order), method: :delete, class: "btn", style: "margin-top: 2rem" %>
+  <% end %>
+  <h4>Placed: <%= @order.created_at.to_date %></h4>
+  <% if @order.updated_at != @order.created_at %>
+    <h4>Updated: <%= @order.updated_at.to_date %></h4>
+  <% end %>
+  <h4>Total Cost: <%= number_to_currency(@order.total_price) %></h4>
+  <br><br>
+  <div class="row">
+    <div class="col s4">
+      <% @order.items.each do |item| %>
+        <% order_item = item.find_order_item(@order.id) %>
+        <div class="item-<%= item.id %>-info card hoverable-dark red">
+          <div class="card-image">
+            <%= link_to item_path(item) do %>
+              <%= image_tag item.image, {class: "item-#{item.id}-image", alt: "#{item.name}-image"} %>
+            <% end %>
+          </div>
+          <div class="card-content">
+            <span class="card-title"><%= link_to item.name, item_path(item), class: "white-text" %></span>
+            <p><%= item.description %></p>
+            <p>Price per Item: <%= number_to_currency(order_item.price / order_item.quantity) %> 
+              <%= "(Discounted)" if order_item.coupon && (item.user_id == order_item.coupon.user_id) %></p>
+            <p>Ordered: <%= order_item.quantity %></p>
+            <p>Subtotal: <%= number_to_currency(order_item.price) %></p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
