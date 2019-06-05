@@ -25,4 +25,32 @@ class Cart
   def items
     return Hash[@contents.map {|id,qnt| [Item.find(id), qnt]}]
   end
+
+  def total
+    return @contents.sum {|id,qnt| Item.find(id).price * qnt}
+  end
+
+  def dollar_off_price(coupon)
+    coupon ||= Coupon.find(session[:coupon_id])
+    count = 0
+    @contents.each {|id,qnt| count += qnt if Item.find(id).user_id == coupon.user_id}
+    return count == 0 ? coupon.amount : coupon.amount.to_f / count
+  end
+
+  def discount_total(coupon)
+    dollar_off = self.dollar_off_price(coupon)
+    return @contents.sum do |id,qnt|
+      item = Item.find(id)
+      price = item.price
+      if item.user_id == coupon.user_id
+        if coupon.percent
+          price -= (price * (coupon.amount.to_f / 100))
+        else
+          price -= (dollar_off / 100)
+          price = 0.0 if price < 0.0
+        end
+      end
+      price * qnt
+    end
+  end
 end

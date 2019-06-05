@@ -2,16 +2,19 @@ require "rails_helper"
 
 RSpec.describe "when I visit a user's profile page" do
   before :each do
-    @merchant = User.create!(email: "merchant@gmail.com", active: true, role: 1, name: "Merchant", address: "Merchant Address", city: "Merchant City", state: "Merchant State", zip: "12345", password: "123456")
-    @user_1 = User.create!(email: "user_1@gmail.com", active: true, role: 0, name: "User 1", address: "User 1 Address", city: "User 1 City", state: "User 1 State", zip: "22345", password: "123456")
-    @user_2 = User.create!(email: "user_2@gmail.com", active: true, role: 0, name: "User 2", address: "User 2 Address", city: "User 2 City", state: "User 2 State", zip: "32345", password: "123456")
+    @merchant = User.create!(email: "merchant@gmail.com", active: true, role: 1, name: "Merchant", password: "123456")
+    @merchant_address = @merchant.addresses.create!(name: "Home", address: "Merchant Address", city: "Merchant City", state: "Merchant State", zip: "12345")
+    @user_1 = User.create!(email: "user_1@gmail.com", active: true, role: 0, name: "User 1", password: "123456")
+    @user_1_address = @user_1.addresses.create!(name: "Home", address: "User 1 Address", city: "User 1 City", state: "User 1 State", zip: "22345")
+    @user_2 = User.create!(email: "user_2@gmail.com", active: true, role: 0, name: "User 2", password: "123456")
+    @user_2_address = @user_2.addresses.create!(name: "Home", address: "User 2 Address", city: "User 2 City", state: "User 2 State", zip: "32345")
 
     @item_1 = @merchant.items.create!(name: "Item 1", active: true, price: 1.00, description: "Item 1 Description", image: "https://tradersofafrica.com/img/no-product-photo.jpg", inventory: 10)
     @item_2 = @merchant.items.create!(name: "Item 2", active: true, price: 2.00, description: "Item 2 Description", image: "https://tradersofafrica.com/img/no-product-photo.jpg", inventory: 15)
     @item_3 = @merchant.items.create!(name: "Item 3", active: true, price: 3.00, description: "Item 3 Description", image: "https://tradersofafrica.com/img/no-product-photo.jpg", inventory: 20)
 
-    @order_1 = @user_1.orders.create!(status: 3)
-    @order_2 = @user_1.orders.create!(status: 3)
+    @order_1 = @user_1.orders.create!(status: 3, address_id: @user_1_address.id)
+    @order_2 = @user_1.orders.create!(status: 3, address_id: @user_2_address.id)
 
     @order_item_1 = @order_1.order_items.create!(item_id: @item_1.id, quantity: 1, price: 1.00, fulfilled: true)
     @order_item_2 = @order_2.order_items.create!(item_id: @item_1.id, quantity: 1, price: 1.00, fulfilled: true)

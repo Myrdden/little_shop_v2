@@ -3,14 +3,14 @@ class User < ApplicationRecord
 
   has_many :items
   has_many :orders
+  has_many :addresses
+  accepts_nested_attributes_for :addresses
+
+  has_many :coupons
 
   enum role: ["default", "merchant", "admin"]
 
   validates :name, presence: true, length: (2..51)
-  validates :address, presence: true
-  validates :city, presence: true
-  validates :state, presence: true
-  validates :zip, presence: true, length: (5..5)
   validates :email, presence: true, uniqueness: true
   validates :password_digest, presence: true
 
@@ -146,6 +146,14 @@ class User < ApplicationRecord
 
   def items_no_images
     items.where(image: [nil, ""])
+  end
+
+  def active_addresses
+    self.addresses.where(active: true)
+  end
+
+  def active_coupons
+    self.coupons.where(active: true)
   end
 
   # - name of the user who bought the most total items from me (pick one if there's a tie), and the total quantity

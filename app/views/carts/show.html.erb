@@ -4,11 +4,50 @@
 <% else %>
   <div class="row clearfix">
     <h3 class="cart-margins" style="display: inline-block">Your cart:</h3>
-    <%= link_to "Empty", cart_path, method: :delete, class: "right btn cart-margins" %>
+    <%= link_to "Empty", cart_path, method: :delete, class: "right btn cart-margins", style: "margin-right: 0" %>
     <% if current_user %>
-      <%= link_to "Check Out", checkout_path, method: :post, class: "right btn cart-margins", style: "margin-right: 2rem" %>
+      <% if current_user.active_addresses.empty? %>
+        <h5 class="right cart-margins" style="margin-right: 2rem">
+          You have no stored addresses. <%= link_to "Add one", new_address_path %> to check out.
+        </h5>
+      <% else %>
+        <%= form_tag checkout_path, method: :post, class: "right", style: "display: inline-block" do |f| %>
+          <%= submit_tag "Check Out", class: "right btn cart-margins" %>
+          <div id="address-select" class="right cart-margins" style="display: inline-block; width: 12rem">
+            <%= select_tag :address_name, options_for_select(current_user.active_addresses.map {|adr| adr.name}) %>
+          </div>
+          <h5 class="right cart-margins">Ship To:</h5>
+        <% end %>
+      <% end %>
     <% else %>
-      <p class="right cart-margins">You must <%= link_to "login", login_path %> or <%= link_to "register", register_path %> to check out.</p>
+      <h5 class="right cart-margins" style="margin-right: 2rem">
+        You must <%= link_to "login", login_path %> or <%= link_to "register", register_path %> to check out.
+      </h5>
+    <% end %>
+  </div>
+  <div class="row">
+    <h4>Total: <%= number_to_currency(@cart.total) %></h4>
+  </div>
+  <% if @coupon %>
+    <div class="row">
+      <h4>
+        Coupon Applied: [<%=@coupon.code%>] -> 
+        <% if @coupon.percent %>
+          <%= @coupon.amount %>% off
+        <% else %>
+          <%= number_to_currency(@coupon.amount.to_f / 100) %> off
+        <% end %>
+      </h4>
+      <h4>After Discounts: <%= number_to_currency(@cart.discount_total(@coupon)) %></h4>
+    </div>
+  <% end %>
+  <div id="coupon-input" class="row">
+    <%= form_tag cart_path, method: "put" do |f| %>
+      <h4 class="left" style="margin: 0 2rem 0 0">Enter Coupon Code:</h4>
+      <div class="left" style="display: inline-block; width: 15rem">
+        <%= text_field_tag :code %>
+      </div>
+      <%= submit_tag "Add Coupon", class: "left btn", style: "margin-left: 2rem" %>
     <% end %>
   </div>
   <div class="row">
@@ -20,7 +59,9 @@
           </div>
           <div class="card-stacked">
             <div class="card-content">
-              <%=item.name%>: <%=quantity%><BR>
+              <%=item.name%>: <%=quantity%><br>
+              <%=number_to_currency(item.price)%> per item<br>
+              Subtotal: <%=number_to_currency(item.price * quantity)%><br>
             </div>
             <div class="card-action center">
               <%= form_tag "/cart", method: "post" do |f| %>

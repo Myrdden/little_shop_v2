@@ -2,15 +2,18 @@
   <div class="row">
     <%current_user.orders.each do |order| %>
       <%= link_to profile_order_path(order), class: "white-text" do %>
-        <div id="Order-<%= order.id %>" class="card-panel red">
-          <span class="card-title">Order #<%=order.id%></span>
+        <div id="Order-<%= order.id %>" class="card red">
           <div class="card-content">
-            <p><%= "Order Cancelled" if order.cancelled? %>
+            <span class="card-title">Order #<%=order.id%>, <%= order.total_item_count %> items</span>
             <p>Placed: <%= order.created_at.to_date %></p>
-            <p>Updated: <%= order.updated_at.to_date %></p>
-            <p>Status: <%= order.status %></p>
-            <p>Number of Items: <%= order.total_item_count %></p>
-            <p>Order Cost: <%= order.total_price %></p>
+            <% if order.updated_at != order.created_at %>
+              <p>Updated: <%= order.updated_at.to_date %></p>
+            <% end %>
+            <p>Status: <%= order.status.capitalize %></p>
+            <p>Shipping Address: <%= order.address.address %>, <%= order.address.city %> <%= order.address.state %> 
+                <%= order.address.zip %> (<%= order.address.name %>)
+            </p>
+            <p>Order Cost: <%= number_to_currency(order.total_price) %></p>
           </div>
         </div>
       <% end %>

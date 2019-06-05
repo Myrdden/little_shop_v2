@@ -18,11 +18,27 @@ class CartsController < ApplicationController
     redirect_back fallback_location: '/'
   end
 
+  def update
+    coupon = Coupon.find_by code: params[:code]
+    if coupon
+      session[:coupon_id] = coupon.id
+      flash[:note] = "Coupon added."
+    else
+      flash[:warn] = "No coupon with that code found."
+    end
+    redirect_to cart_path
+  end
+
   def show
     if current_user && (current_user.merchant? || current_admin?)
       render file: "/public/404", status: 404
     end
     @cart = Cart.new(session[:cart])
+    if session[:coupon_id]
+      @coupon = Coupon.find(session[:coupon_id])
+    else
+      @coupon = nil
+    end
   end
 
   def destroy; session[:cart] = nil; redirect_to '/cart' end

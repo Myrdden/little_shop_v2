@@ -1,0 +1,20 @@
+<div class="container">
+  <h2>Edit Coupon:</h2>
+
+  <%= form_for @coupon, url: coupon_path(@coupon.id), method: "post" do |f| %>
+    <h4>Name:</h4>
+    <%= f.text_field :name, size: "40" %>
+    <h4>Code:</h4>
+    <%= f.text_field :code, size: "10" %>
+    <h4>Amount:</h4>
+    <p>NOTE: If not using Percent, "Dollar Off" prices are in CENTS.</p>
+    <%= f.text_field :amount, size: "40" %>
+    <p>
+      <label>
+        <%= f.check_box :percent %>
+        <span class="white-text" style="font-size: x-large">Percent</span>
+      </label>
+    </p>
+    <%= f.submit "Update Coupon", class: "btn", style: "margin-top: 2rem" %>
+  <% end %>
+</div>

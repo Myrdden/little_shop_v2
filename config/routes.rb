@@ -18,8 +18,16 @@ Rails.application.routes.draw do
   get '/profile/edit', to: "users#edit"
 
   namespace :profile do
-    resources :orders, only: [:index, :show, :destroy]
+    resources :orders, only: [:index, :show, :destroy, :update]
   end
+
+  resources :addresses, only: [:new, :edit, :create, :destroy]
+  post '/addresses/:id', to: "addresses#update"
+  put '/addresses/disable/:id', to: "addresses#disable", as: :disable_address
+
+  resources :coupons, only: [:new, :edit, :create, :destroy]
+  post '/coupons/:id', to: "coupons#update"
+  put '/coupons/disable/:id', to: "coupons#disable", as: :disable_coupon
 
   put '/users', to: "users#update"
 
@@ -29,6 +37,7 @@ Rails.application.routes.draw do
   #these gotta go in a resource
   get '/cart', to: 'carts#show'
   post '/cart', to: 'carts#create'
+  put '/cart', to: 'carts#update'
   delete '/cart', to: 'carts#destroy'
   post '/checkout', to: 'profile/orders#create'
 

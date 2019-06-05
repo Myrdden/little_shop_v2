@@ -31,7 +31,7 @@ RSpec.describe "when I visit the welcome page" do
 
   context "as a registered user" do
     it "lets a user log out" do
-      user = User.create!(email: "bob@bob.com", active: true, password: "124355", name: "bob", address:"123 bob st.", city: "bobton", state:"MA", zip: 28234)
+      user = User.create!(email: "bob@bob.com", active: true, password: "124355", name: "bob")
 
       visit root_path
 
@@ -49,7 +49,7 @@ RSpec.describe "when I visit the welcome page" do
     end
 
     it "gives me different options as a user" do
-      user = User.create!(email: "bob@bob.com", active: true, password: "124355", name: "bob", address:"123 bob st.", city: "bobton", state:"MA", zip: 28234)
+      user = User.create!(email: "bob@bob.com", active: true, password: "124355", name: "bob")
 
       visit root_path
 
@@ -84,7 +84,7 @@ RSpec.describe "when I visit the welcome page" do
     end
 
     it "directs to a users profile if already logged in" do
-      user = User.create!(email: "bob@bob.com", active: true, password: "124355", name: "bob", address:"123 bob st.", city: "bobton", state:"MA", zip: 28234)
+      user = User.create!(email: "bob@bob.com", active: true, password: "124355", name: "bob")
 
       visit root_path
 
@@ -101,7 +101,7 @@ RSpec.describe "when I visit the welcome page" do
   context "as a merchant" do
     before :each do
       @merchant = User.create!(email: "joe@joe.com", active: true, password: "124355",
-        name: "joe", role: 1, address:"123 joe st.", city: "joeton", state:"MI", zip: 28334)
+        name: "joe", role: 1)
 
       visit root_path
 
@@ -143,7 +143,7 @@ RSpec.describe "when I visit the welcome page" do
 
   context "as an admin" do
     before :each do
-      @admin = User.create!(email: "admin@gmail.com", password: "124356", name: "Admin", role: 2, address: "Admin Address", city: "Admin City", state: "MA", zip: 28334)
+      @admin = User.create!(email: "admin@gmail.com", password: "124356", name: "Admin", role: 2)
 
       visit root_path
 

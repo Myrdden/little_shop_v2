@@ -3,8 +3,13 @@ class Order < ApplicationRecord
 
   has_many :order_items
   has_many :items, through: :order_items
+  has_one :address
 
   enum status: ["pending", "packaged", "shipped", "cancelled"]
+
+  def address
+    Address.find(self.address_id)
+  end
 
   def self.admin_dashboard_sort
     order("CASE orders.status

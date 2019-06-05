@@ -3,20 +3,31 @@ require 'rails_helper'
 RSpec.describe Order, type: :model do
   it {should belong_to :user}
   it {should have_many :order_items}
+  it (should have_one :address}
   it {should have_many(:items).through(:order_items)}
 
   describe "class methods" do
     before :each do
-      @user_1 = create(:merchant, city: "Denver", state: "CO")
+      @user_1 = create(:merchant)
+      @user_1_address = @user_1.addresses.create(name: "Home", address: "12345 Sell It Rd.", city: "Denver", state: "CO", zip: "80210")
       @user_2 = create(:user)
-      @user_3 = create(:merchant, city: "Sacramento", state: "CA")
-      @user_4 = create(:merchant, city: "Springfield", state: "CO")
+      @user_2_address = @user_2.addresses.create(:address_bot)
+      @user_3 = create(:merchant)
+      @user_3_address = @user_3.addresses.create(name: "Home", address: "12345 Sell It Rd.", city: "Sacramento", state: "CA", zip: "80210")
+      @user_4 = create(:merchant)
+      @user_4_address = @user_4.addresses.create(name: "Home", address: "12345 Sell It Rd.", city: "Springfield", state: "CO", zip: "80210")
       @user_5 = create(:user)
-      @user_6 = create(:merchant, city: "Springfield", state: "NY")
+      @user_5_address = @user_5.addresses.create(:address_bot)
+      @user_6 = create(:merchant)
+      @user_6_address = @user_6.addresses.create(name: "Home", address: "12345 Sell It Rd.", city: "Springfield", state: "NY", zip: "80210")
       @user_7 = create(:user)
+      @user_7_address = @user_7.addresses.create(:address_bot)
       @user_8 = create(:user)
+      @user_8_address = @user_8.addresses.create(:address_bot)
       @user_9 = create(:user)
+      @user_9_address = @user_9.addresses.create(:address_bot)
       @user_10 = create(:user)
+      @user_10_address = @user_10.addresses.create(:address_bot)
 
       @item_1 = create(:item, price: 10, user: @user_1)
       @item_2 = create(:item, price: 20, user: @user_1)
@@ -29,16 +40,16 @@ RSpec.describe Order, type: :model do
       @item_9 = create(:item, price: 3000, user: @user_3)
       @item_10 = create(:item, price: 1, user: @user_6)
 
-      @order_1 = create(:packaged, user: @user_2, status: 0)
-      @order_2 = create(:packaged, user: @user_7, status: 0)
-      @order_3 = create(:packaged, user: @user_8, status: 0)
-      @order_4 = create(:packaged, user: @user_9, status: 1)
-      @order_5 = create(:packaged, user: @user_9, status: 1)
-      @order_6 = create(:packaged, user: @user_9, status: 1)
-      @order_7 = create(:packaged, user: @user_9, status: 2)
-      @order_8 = create(:packaged, user: @user_9, status: 2)
-      @order_9 = create(:packaged, user: @user_10, status: 2)
-      @order_10 = create(:packaged, user: @user_10, status: 3)
+      @order_1 = create(:packaged, user: @user_2, status: 0, address_id: @user_2_address.id)
+      @order_2 = create(:packaged, user: @user_7, status: 0, address_id: @user_7_address.id)
+      @order_3 = create(:packaged, user: @user_8, status: 0, address_id: @user_8_address.id)
+      @order_4 = create(:packaged, user: @user_9, status: 1, address_id: @user_9_address.id)
+      @order_5 = create(:packaged, user: @user_9, status: 1, address_id: @user_9_address.id)
+      @order_6 = create(:packaged, user: @user_9, status: 1, address_id: @user_9_address.id)
+      @order_7 = create(:packaged, user: @user_9, status: 2, address_id: @user_9_address.id)
+      @order_8 = create(:packaged, user: @user_9, status: 2, address_id: @user_9_address.id)
+      @order_9 = create(:packaged, user: @user_10, status: 2, address_id: @user_10_address.id)
+      @order_10 = create(:packaged, user: @user_10, status: 3, address_id: @user_10_address.id)
 
       @order_item_1 = @order_1.order_items.create!(item_id: @item_1.id, quantity: 1, price: 10.00, fulfilled: true, created_at: Time.zone.local(2018, 11, 24, 01, 04, 44), updated_at: Time.zone.local(2018, 11, 27, 01, 04, 44))
       @order_item_2 = @order_1.order_items.create!(item_id: @item_2.id, quantity: 2, price: 40.00, fulfilled: true)
@@ -64,19 +75,22 @@ RSpec.describe Order, type: :model do
 
   describe "instance methods" do
     before :each do
-      @user_1 = User.create!(email: "user_1@gmail.com", role: 2, name: "User 1", address: "User 1 Address", city: "User 1 City", state: "User 1 State", zip: "12345", password: "123456")
-      @user_2 = User.create!(email: "user_2@gmail.com", role: 2, name: "User 2", address: "User 2 Address", city: "User 2 City", state: "User 2 State", zip: "22345", password: "123456")
+      @user_1 = User.create!(email: "user_1@gmail.com", role: 2, name: "User 1", password: "123456")
+      @user_1_address = @user_1.addresses.create!(name: "Home", address: "User 1 Address", city: "User 1 City", state: "User 1 State", zip: "12345") 
+      @user_2 = User.create!(email: "user_2@gmail.com", role: 2, name: "User 2", password: "123456")
+      @user_2_address = @user_2.addresses.create!(name: "Home", address: "User 2 Address", city: "User 2 City", state: "User 2 State", zip: "22345") 
 
-      @user_8 = User.create!(email: "user_8@gmail.com", role: 0, name: "User 8", address: "User 8 Address", city: "User 8 City", state: "User 8 State", zip: "82345", password: "123456")
+      @user_8 = User.create!(email: "user_8@gmail.com", role: 0, name: "User 8", password: "123456")
+      @user_8_address = @user_8.addresses.create!(name: "Home", address: "User 8 Address", city: "User 8 City", state: "User 8 State", zip: "82345") 
 
       @item_1 = @user_1.items.create!(name: "Item 1", active: true, price: 1.00, description: "Item 1 Description", image: "https://tradersofafrica.com/img/no-product-photo.jpg", inventory: 10)
       @item_2 = @user_2.items.create!(name: "Item 2", active: true, price: 2.00, description: "Item 2 Description", image: "https://tradersofafrica.com/img/no-product-photo.jpg", inventory: 15)
       @item_3 = @user_2.items.create!(name: "Item 3", active: true, price: 3.00, description: "Item 3 Description", image: "https://tradersofafrica.com/img/no-product-photo.jpg", inventory: 20)
 
-      @order_1 = @user_8.orders.create!(status: 3)
-      @order_2 = @user_8.orders.create!(status: 2)
-      @order_3 = @user_8.orders.create!(status: 0)
-      @order_4 = @user_8.orders.create!(status: 1)
+      @order_1 = @user_8.orders.create!(status: 3, address_id: @user_8_address.id)
+      @order_2 = @user_8.orders.create!(status: 2, address_id: @user_8_address.id)
+      @order_3 = @user_8.orders.create!(status: 0, address_id: @user_8_address.id)
+      @order_4 = @user_8.orders.create!(status: 1, address_id: @user_8_address.id)
 
       @order_item_1 = @order_1.order_items.create!(item_id: @item_1.id, quantity: 1, price: 1.00, fulfilled: true)
       @order_item_2 = @order_2.order_items.create!(item_id: @item_1.id, quantity: 1, price: 1.00, fulfilled: true)

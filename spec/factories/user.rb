@@ -4,17 +4,10 @@ FactoryBot.define do
       "user_name #{n}"
     end
 
-    sequence :address do |n|
-      "#{n}234 Main St"
-    end
-
     sequence :email do |n|
       "u#{n}@users.com"
     end
     active {true}
-    city {"Springfield"}
-    state {"VA"}
-    zip {"90210"}
     password {"password"}
     role { 0 }
   end
